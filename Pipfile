@@ -5,6 +5,8 @@ name = "pypi"
 
 [packages]
 slackclient = "*"
+flask = "*"
+requests = "*"
 
 [dev-packages]
 
