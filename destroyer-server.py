@@ -10,7 +10,7 @@ def add_to_slack_button():
 @app.route('/auth/redirect')
 def handle_auth_redirect():
     options = {
-        'code': blah,
+        'code': request.query.code,
         'client_id': os.environ('SLACK_CLIENT_ID'),
         'client_secret': os.environ('SLACK_CLIENT_SECRET'),
         'redirect_uri': os.environ('REDIRECT_URI')
