@@ -3,6 +3,7 @@
 import time
 from slackclient import SlackClient
 from constants import *
+from util import *
 
 slack_client = SlackClient(SLACK_BOT_TOKEN)
 
@@ -14,6 +15,19 @@ def handle_command(command, channel):
     if command.startswith(SLACKBOT_SILENCE_COMMAND):
         # Returns a message if we ask Slackbot to silence
         send_basic_message('no', channel)
+
+    if command.startswith(TOGGLE_ATTACK_COMMAND):
+        global_settings['attack'] = not global_settings['attack']
+        
+        if global_settings['attack'] == True:
+            send_basic_message('DESTROY', channel)
+
+        if global_settings['attack'] == False:
+            send_basic_message('DEACTIVATE', channel)
+
+def delete_message(timestamp, channel):
+    slack_client.api_call("chat.delete", channel=channel,
+                          ts=timestamp, as_user=True)
 
 def send_basic_message(message, channel):
     """ Sends a basic message with the Slack API """
