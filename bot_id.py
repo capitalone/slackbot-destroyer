@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+import os
 from constants import SLACK_BOT_TOKEN
 from slackclient import SlackClient
 

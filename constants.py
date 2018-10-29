@@ -6,3 +6,4 @@ AT_BOT = "<@" + BOT_ID + ">"
 
 # Commands
 SLACKBOT_SILENCE_COMMAND = 'shh'
+TOGGLE_ATTACK_COMMAND = 'attack'
