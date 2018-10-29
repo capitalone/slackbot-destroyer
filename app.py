@@ -13,7 +13,7 @@ def handle_command(command, channel):
     """
     if command.startswith(SLACKBOT_SILENCE_COMMAND):
         # Returns a message if we ask Slackbot to silence
-        send_basic_message('no')
+        send_basic_message('no', channel)
 
 def send_basic_message(message, channel):
     """ Sends a basic message with the Slack API """

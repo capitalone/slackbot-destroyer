@@ -4,7 +4,7 @@ from constants import SLACK_BOT_TOKEN
 from slackclient import SlackClient
 
 # This should be replaced with the name of the bot user.
-BOT_NAME = 'slackbot-destroyer'
+BOT_NAME = str(os.environ.get('BOT_NAME'))
 
 slack_client = SlackClient(SLACK_BOT_TOKEN)
 
