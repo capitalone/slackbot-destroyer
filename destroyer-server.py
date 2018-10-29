@@ -16,3 +16,8 @@ def handle_auth_redirect():
         'redirect_uri': os.environ('REDIRECT_URI')
     }
     return requests.get('https://slack.com/api/oauth.access', params=options)
+
+
+if __name__ == '__main__':
+    app.debug = True
+    app.run(host='0.0.0.0', port=5000)
