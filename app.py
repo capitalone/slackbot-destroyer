@@ -14,9 +14,14 @@ def handle_command(command, channel):
         Handles any generic command that is pointed
         towards the bot.
     """
+    
+    if channel not in global_store['destroy'].keys():
+        # If the bot is being used in a new channel we store a new dictionary entry for it.
+        global_store['destroy'][channel] = False
+
     if command.startswith(HELP_COMMAND):
         # Displays a list of available commands.
-        send_attachment_message(
+        return send_attachment_message(
         {
             'fallback': 'Available Commands',
             'color': '#150650',
@@ -48,21 +53,26 @@ def handle_command(command, channel):
         } 
         , channel)
 
-    if command.startswith(TOGGLE_ATTACK_COMMAND):
-        global_store['destroy'] = not global_store['destroy']
-        
-        if global_store['destroy'] == True:
-            send_basic_message('`D E S T R O Y` :robot_face:', channel)
+    if command.startswith(TOGGLE_DESTROY_COMMAND):
+        if global_store['destroy'][channel] == True:
+            return send_basic_message('`A L R E A D Y  D E S T R O Y I N G` :robot_face:', channel)
 
-        if global_store['destroy'] == False:
-            send_basic_message('`D E A C T I V A T E` :robot_face:', channel)
+        global_store['destroy'][channel] = True
+        return send_basic_message('`D E S T R O Y` :robot_face:', channel)
+
+    if command.startswith(TOGGLE_DEACTIVATE_COMMAND):
+        if global_store['destroy'][channel] == False:
+            return send_basic_message('`S T A N D I N G  B Y` :robot_face:', channel)
+
+        global_store['destroy'][channel] = False
+        return send_basic_message('`D E A C T I V A T E` :robot_face:', channel)
 
     if command.startswith(TELEPORT_COMMAND):
         # Returns a random robot inspired videos.
-        send_basic_message(random.choice(TELEPORT_VIDEOS), channel)
+        return send_basic_message(random.choice(TELEPORT_VIDEOS), channel)
 
     if command.startswith(STATS_COMMAND):
-        send_basic_message('`I  H A V E  D E S T R O Y E D  %s  M E S S A G E  F R O M  S L A C K B O T` :robot_face:' % global_store['deletions'], channel)
+        return send_basic_message('`I  H A V E  D E S T R O Y E D  %s  M E S S A G E  F R O M  S L A C K B O T` :robot_face:' % global_store['deletions'], channel)
 
 
 def send_basic_message(message, channel):
@@ -129,8 +139,8 @@ def parse_slack_output(slack_rtm_output):
     if output_list and len(output_list) > 0:
         for output in output_list:
 
-            if global_store['destroy'] == True and output and 'subtype' in output.keys():
-                if output['subtype'] == 'slackbot_response':
+            if 'channel' in output.keys() and output['channel'] in global_store['destroy'].keys() and global_store['destroy'][output['channel']] == True:
+                if 'subtype' in output.keys() and output['subtype'] == 'slackbot_response':
                     delete_message(output['ts'], output['channel'])
 
             if output and 'text' in output and AT_BOT in output['text']:

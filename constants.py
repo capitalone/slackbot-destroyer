@@ -6,7 +6,8 @@ SLACK_USER_TOKEN = str(os.environ.get('SLACK_USER_TOKEN'))
 AT_BOT = "<@" + BOT_ID + ">"
 
 # Commands
-TOGGLE_ATTACK_COMMAND = 'destroy'
+TOGGLE_DESTROY_COMMAND = 'destroy'
+TOGGLE_DEACTIVATE_COMMAND = 'deactivate'
 HELP_COMMAND = 'commands'
 STATS_COMMAND = 'stats'
 TELEPORT_COMMAND = 'teleport'
