@@ -11,7 +11,7 @@
     "website": "http://unitedincome.com",
     "env": {
       "BOT_ID": {
-        "description": "The ID of your Slack bot user, this is required so the bot knows when a command is directed at it. If you're unsure what your bot ID is you can run bot_id.py which will print the ID, you'll need to make sure that the BOT_NAME field within the file corresponds with the one you setup in the Slack interface.",
+        "description": "The ID of your Slack bot user, this is required so the bot knows when a command is directed at it. If you're unsure what your bot ID is you can run id.py which will print the ID, you'll need to make sure that the BOT_NAME field within the file corresponds with the one you setup in the Slack interface.",
         "value": "replace_me",
         "required": true
       },
@@ -36,7 +36,7 @@
         "required": false
       },
       "CHANNEL_WHITELIST": {
-        "description": "A comma seperated list of channels you'd like the bot to be able to join, if left blank the bot can join all channels, for example 'general, random'.",
+        "description": "A comma separated list of channels you'd like the bot to be able to join, if left blank the bot can join all channels, for example 'general, random'.",
         "value": "",
         "required": false
       }
