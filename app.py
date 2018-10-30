@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import time
 from slackclient import SlackClient
+import requests
 from constants import *
 from util import *
 
@@ -17,17 +18,22 @@ def handle_command(command, channel):
         send_basic_message('no', channel)
 
     if command.startswith(TOGGLE_ATTACK_COMMAND):
-        global_settings['attack'] = not global_settings['attack']
+        global_settings['destroy'] = not global_settings['destroy']
         
-        if global_settings['attack'] == True:
+        if global_settings['destroy'] == True:
             send_basic_message('DESTROY', channel)
 
-        if global_settings['attack'] == False:
+        if global_settings['destroy'] == False:
             send_basic_message('DEACTIVATE', channel)
 
 def delete_message(timestamp, channel):
-    slack_client.api_call("chat.delete", channel=channel,
-                          ts=timestamp, as_user=True)
+    options = {
+        'token': SLACK_BOT_ACCESS_TOKEN,
+        'channel': channel,
+        'ts': timestamp,
+        'as_user': True
+    }
+    requests.post('https://slack.com/api/chat.delete', params=options)
 
 def send_basic_message(message, channel):
     """ Sends a basic message with the Slack API """
@@ -42,6 +48,11 @@ def parse_slack_output(slack_rtm_output):
     output_list = slack_rtm_output
     if output_list and len(output_list) > 0:
         for output in output_list:
+
+            if global_settings['destroy'] == True and output and 'subtype' in output.keys():
+                if output['subtype'] == 'slackbot_response':
+                    delete_message(output['ts'], output['channel'])
+
             if output and 'text' in output and AT_BOT in output['text']:
                 # return text after the @ mention, whitespace removed
                 return output['text'].split(AT_BOT)[1].strip(), \
@@ -50,7 +61,6 @@ def parse_slack_output(slack_rtm_output):
 
 if __name__ == "__main__":
     READ_WEBSOCKET_DELAY = 1
-
     if slack_client.rtm_connect():
         print('Launch successful, waiting for input...')
 
