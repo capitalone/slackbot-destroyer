@@ -11,6 +11,8 @@ def add_to_slack_button():
 
 @app.route('/auth/redirect')
 def handle_auth_redirect():
+    print('hello log world')
+    print(request)
     options = {
         'code': request.args.get('code'),
         'client_id': os.environ.get('SLACK_CLIENT_ID'),
@@ -18,6 +20,7 @@ def handle_auth_redirect():
         'redirect_uri': os.environ.get('REDIRECT_URI')
     }
 
+    print(options)
     return requests.get('https://slack.com/api/oauth.access', params=options)
 
 
