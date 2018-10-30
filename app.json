@@ -21,6 +21,14 @@
       "SLACK_USER_TOKEN": {
         "description": "The token for the user authorizing the bot.",
         "value": "replace_me"
+      },
+      "AWS_ACCESS_KEY_ID": {
+        "description": "The access key ID for AWS. If you don't want to persist the bots settings outside of memory do not include this.",
+        "value": ""
+      },
+      "AWS_SECRET_ACCESS_KEY": {
+        "description": "The secret access key ID for AWS. If you don't want to persist the bots settings outside of memory do not include this.",
+        "value": ""
       }
     }
   }
