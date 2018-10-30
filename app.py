@@ -183,12 +183,13 @@ def parse_slack_output(slack_rtm_output):
 
             # If the channel name is not found in the whitelist, the bot removes its self.
             # This functionality requires the channels:read and channels:write permissions.
-            if 'type' in output.keys() and output['type'] == 'channel_joined':
+            if 'type' in output.keys() and output['type'] == 'channel_joined' and CHANNEL_WHITELIST is not None:
+                channel_white_list = str(CHANNEL_WHITELIST).strip().split(',')
                 channel_list = get_channel_list()
 
                 if 'channels' in channel_list.keys():
                     for channel in channel_list['channels']:
-                        if channel['name'] not in CHANNEL_WHITELIST:
+                        if channel['name'] not in channel_white_list:
                             remove_from_channel(BOT_ID, channel['id'])
 
             # Handles message types
