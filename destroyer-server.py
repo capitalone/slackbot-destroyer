@@ -21,7 +21,9 @@ def handle_auth_redirect():
     }
 
     print(options)
-    return requests.get('https://slack.com/api/oauth.access', params=options)
+    rsp = requests.get('https://slack.com/api/oauth.access', params=options)
+    print(rsp)
+    return (rsp.content, rsp.status_code, rsp.headers.items())
 
 
 if __name__ == '__main__':
