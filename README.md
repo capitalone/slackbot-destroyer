@@ -8,7 +8,7 @@ This bot deletes auto responses from Slack's very own Slackbot. If you'd like to
 2. Add a [Bot user](https://api.slack.com/bot-users) to the app you created and give it a name. 
 3. Click the button below and enter the required settings.
 
-![https://www.herokucdn.com/deploy/button.png](https://heroku.com/deploy?template=https://github.com/UnitedIncome/slackbot-destroyer/master)
+![assets/heroku_button.png](https://heroku.com/deploy?template=https://github.com/UnitedIncome/slackbot-destroyer/master)
 
 If you'd like to run the application manually you can add the required secrets within [constants.py](constants.py) as environment variables and then run `$ python app.py`.
 
