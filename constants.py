@@ -1,8 +1,8 @@
 import os
 
-BOT_ID = str(os.environ.get('BOT_ID'))
-SLACK_BOT_TOKEN = str(os.environ.get('SLACK_BOT_TOKEN'))
-SLACK_USER_TOKEN = str(os.environ.get('SLACK_USER_TOKEN'))
+BOT_ID = os.environ.get('BOT_ID')
+SLACK_BOT_TOKEN = os.environ.get('SLACK_BOT_TOKEN')
+SLACK_USER_TOKEN = os.environ.get('SLACK_USER_TOKEN')
 CHANNEL_WHITELIST = os.environ.get('CHANNEL_WHITELIST')
 AT_BOT = "<@" + BOT_ID + ">"
 
