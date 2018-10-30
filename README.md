@@ -24,3 +24,24 @@ The installation button will require you to enter a number of API keys. Below yo
 | `AWS_ACCESS_KEY_ID`  | Your AWS access key id, only required if you'd like to persist the bot settings.  | **No** |
 | `AWS_SECRET_ACCESS_KEY`  | Your AWS access key id, only required if you'd like to persist the bot settings.  | **No** |
 | `CHANNEL_WHITELIST`  | A comma seperated list of channels you'd like the bot to operate in, if this is left blank the bot will be allowed to join any channel. Requires `channels:write` and `channels:read` permissions. For example `general, random`.  | **No** |
+
+## Commands
+
+The following commands are available.
+
+```
+# Displays a list of available commands.
+@slackbot-destroyer commands
+
+# Activate Slackbot Destroyer in a channel.
+@slackbot-destroyer destroy
+
+# Deactivate Slackbot Destroyer in a channel.
+@slackbot-destroyer deactivate
+
+# Show how many times Slackbot Destroyer has destroyed Slackbot responses.
+@slackbot-destroyer stats
+
+# Teleport to the future
+@slackbot-destroyer teleport
+```
