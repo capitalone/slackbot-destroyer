@@ -110,7 +110,7 @@ def send_attachment_message(attachment, channel):
 def delete_message(timestamp, channel):
     """ Deletes a message using the Slack Web API """
     options = {
-        'token': SLACK_BOT_ACCESS_TOKEN,
+        'token': SLACK_USER_TOKEN,
         'channel': channel,
         'ts': timestamp,
         'as_user': True

@@ -18,7 +18,7 @@
         "description": "The bot token found within the Slack API settings.",
         "value": "replace_me"
       },
-      "SLAC_USER_TOKEN": {
+      "SLACK_USER_TOKEN": {
         "description": "The token for the user authorizing the bot.",
         "value": "replace_me"
       }
