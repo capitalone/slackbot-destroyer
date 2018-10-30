@@ -119,16 +119,58 @@ def send_attachment_message(attachment, channel):
 
 def delete_message(timestamp, channel):
     """ Deletes a message using the Slack Web API """
+
     options = {
         'token': SLACK_USER_TOKEN,
         'channel': channel,
         'ts': timestamp,
         'as_user': True
     }
-    requests.post('https://slack.com/api/chat.delete', params=options)
+
+    try:
+        requests.post('https://slack.com/api/chat.delete', params=options)
+    
+    except requests.exceptions.RequestException as error:
+        print(error)
 
     global_store['deletions'] += 1
 
+
+def get_channel_list():
+    """ Gets a list of channels using the Slack Web API """
+
+    options = {
+        'token': SLACK_USER_TOKEN,
+    }
+
+    try:
+        request = requests.get('https://slack.com/api/channels.list', params=options)
+        request.raise_for_status()
+        request_json = request.json()
+
+    except requests.exceptions.RequestException as error:
+        request_json = {}
+        print(error)
+
+    return request_json
+
+
+def remove_from_channel(id, channel):
+    """ Removes a user from a channel, primarily used to remove the bot from
+        non whitelisted channels """
+
+    options = {
+        'token': SLACK_USER_TOKEN,
+        'user': id,
+        'channel': channel
+    }
+
+    try:
+        requests.post('https://slack.com/api/channels.kick', params=options)
+    
+    except requests.exceptions.RequestException as error:
+        print(error)
+    
 
 def parse_slack_output(slack_rtm_output):
     """
@@ -139,14 +181,26 @@ def parse_slack_output(slack_rtm_output):
     if output_list and len(output_list) > 0:
         for output in output_list:
 
-            if 'channel' in output.keys() and output['channel'] in global_store['destroy'].keys() and global_store['destroy'][output['channel']] == True:
-                if 'subtype' in output.keys() and output['subtype'] == 'slackbot_response':
-                    delete_message(output['ts'], output['channel'])
+            # If the channel name is not found in the whitelist, the bot removes its self.
+            # This functionality requires the channels:read and channels:write permissions.
+            if 'type' in output.keys() and output['type'] == 'channel_joined':
+                channel_list = get_channel_list()
 
-            if output and 'text' in output and AT_BOT in output['text']:
-                # Return text after the @ mention, whitespace removed
-                return output['text'].split(AT_BOT)[1].strip(), \
-                    output['channel']
+                if 'channels' in channel_list.keys():
+                    for channel in channel_list['channels']:
+                        if channel['name'] not in CHANNEL_WHITELIST:
+                            remove_from_channel(BOT_ID, channel['id'])
+
+            # Handles message types
+            if 'type' in output.keys() and output['type'] == 'message':
+                if 'channel' in output.keys() and output['channel'] in global_store['destroy'].keys() and global_store['destroy'][output['channel']] == True:
+                    if 'subtype' in output.keys() and output['subtype'] == 'slackbot_response':
+                        delete_message(output['ts'], output['channel'])
+
+                if output and 'text' in output and AT_BOT in output['text']:
+                    # Return text after the @ mention, whitespace removed
+                    return output['text'].split(AT_BOT)[1].strip(), \
+                        output['channel']
     return None, None
 
 
