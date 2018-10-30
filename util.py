@@ -1,4 +1,5 @@
 # Stores the global settings for the bot
-global_settings = {
+global_store = {
   'destroy': False,
+  'deletions': 0,
 }
