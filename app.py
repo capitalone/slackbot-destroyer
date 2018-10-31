@@ -5,7 +5,7 @@ import requests
 import random
 from slackclient import SlackClient
 from constants import *
-from util import *
+from global_store import GlobalStore
 
 slack_client = SlackClient(SLACK_BOT_TOKEN)
 
@@ -15,9 +15,9 @@ def handle_command(command, channel):
         towards the bot.
     """
     
-    if channel not in global_store['destroy'].keys():
+    if channel not in config.destroy.keys():
         # If the bot is being used in a new channel we store a new dictionary entry for it.
-        global_store['destroy'][channel] = False
+        config.destroy[channel] = False
 
     if command.startswith(HELP_COMMAND):
         # Displays a list of available commands.
@@ -32,6 +32,11 @@ def handle_command(command, channel):
                 {
                     "title": "`destroy`",
                     "value": "`Deletes all incoming messages from Slackbot.`",
+                    "short": True
+                },
+                {
+                    "title": "`deactivate`",
+                    "value": "`Stops Slackbot deletion.`",
                     "short": True
                 },
                 {
@@ -54,17 +59,17 @@ def handle_command(command, channel):
         , channel)
 
     if command.startswith(TOGGLE_DESTROY_COMMAND):
-        if global_store['destroy'][channel] == True:
+        if config.active_in_channel(channel):
             return send_basic_message('`A L R E A D Y  D E S T R O Y I N G` :robot_face:', channel)
-
-        global_store['destroy'][channel] = True
+        
+        config.update_channel(channel, True)
         return send_basic_message('`D E S T R O Y` :robot_face:', channel)
 
     if command.startswith(TOGGLE_DEACTIVATE_COMMAND):
-        if global_store['destroy'][channel] == False:
+        if not config.active_in_channel(channel):
             return send_basic_message('`S T A N D I N G  B Y` :robot_face:', channel)
 
-        global_store['destroy'][channel] = False
+        config.update_channel(channel, False)
         return send_basic_message('`D E A C T I V A T E` :robot_face:', channel)
 
     if command.startswith(TELEPORT_COMMAND):
@@ -72,7 +77,7 @@ def handle_command(command, channel):
         return send_basic_message(random.choice(TELEPORT_VIDEOS), channel)
 
     if command.startswith(STATS_COMMAND):
-        return send_basic_message('`I  H A V E  D E S T R O Y E D  %s  M E S S A G E  F R O M  S L A C K B O T` :robot_face:' % global_store['deletions'], channel)
+        return send_basic_message('`I  H A V E  D E S T R O Y E D  %s  M E S S A G E  F R O M  S L A C K B O T` :robot_face:' % config.deletions, channel)
 
 
 def send_basic_message(message, channel):
@@ -133,7 +138,7 @@ def delete_message(timestamp, channel):
     except requests.exceptions.RequestException as error:
         print(error)
 
-    global_store['deletions'] += 1
+    config.increment()
 
 
 def get_channel_list():
@@ -194,7 +199,7 @@ def parse_slack_output(slack_rtm_output):
 
             # Handles message types
             if 'type' in output.keys() and output['type'] == 'message':
-                if 'channel' in output.keys() and output['channel'] in global_store['destroy'].keys() and global_store['destroy'][output['channel']] == True:
+                if 'channel' in output.keys() and config.active_in_channel(output['channel']):
                     if 'subtype' in output.keys() and output['subtype'] == 'slackbot_response':
                         delete_message(output['ts'], output['channel'])
 
@@ -206,8 +211,13 @@ def parse_slack_output(slack_rtm_output):
 
 
 if __name__ == "__main__":
+    global config
     READ_WEBSOCKET_DELAY = 1
     if slack_client.rtm_connect():
+        print('Connected to RTM')
+        config = GlobalStore()
+        config.load()
+        print(config)
         print('Launch successful, waiting for input...')
 
         while True:

@@ -35,6 +35,11 @@
         "value": "",
         "required": false
       },
+      "AWS_BUCKET_NAME": {
+        "description": "The name of an optional s3 bucket for storing configs.",
+        "value": "slackbot-destroy-configs",
+        "required": false
+      },
       "CHANNEL_WHITELIST": {
         "description": "A comma separated list of channels you'd like the bot to be able to join, if left blank the bot can join all channels, for example 'general, random'.",
         "value": "",
