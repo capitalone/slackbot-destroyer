@@ -14,7 +14,7 @@ def handle_command(command, channel):
         Handles any generic command that is pointed
         towards the bot.
     """
-    
+
     if channel not in config.destroy.keys():
         # If the bot is being used in a new channel we store a new dictionary entry for it.
         config.destroy[channel] = False
@@ -55,13 +55,13 @@ def handle_command(command, channel):
                     "short": True
                 }
             ],
-        } 
+        }
         , channel)
 
     if command.startswith(TOGGLE_DESTROY_COMMAND):
         if config.active_in_channel(channel):
             return send_basic_message('`A L R E A D Y  D E S T R O Y I N G` :robot_face:', channel)
-        
+
         config.update_channel(channel, True)
         return send_basic_message('`D E S T R O Y` :robot_face:', channel)
 
@@ -78,6 +78,9 @@ def handle_command(command, channel):
 
     if command.startswith(STATS_COMMAND):
         return send_basic_message('`I  H A V E  D E S T R O Y E D  %s  M E S S A G E  F R O M  S L A C K B O T` :robot_face:' % config.deletions, channel)
+
+    if command.startswith(CYBER_COMMAND):
+        return send_basic_message('`T H E Y  D I E  B E T T E R` :robot_face:', channel)
 
 
 def send_basic_message(message, channel):
@@ -134,7 +137,7 @@ def delete_message(timestamp, channel):
 
     try:
         requests.post('https://slack.com/api/chat.delete', params=options)
-    
+
     except requests.exceptions.RequestException as error:
         print(error)
 
@@ -172,10 +175,10 @@ def remove_from_channel(id, channel):
 
     try:
         requests.post('https://slack.com/api/channels.kick', params=options)
-    
+
     except requests.exceptions.RequestException as error:
         print(error)
-    
+
 
 def parse_slack_output(slack_rtm_output):
     """
