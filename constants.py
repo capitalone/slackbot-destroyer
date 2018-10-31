@@ -16,6 +16,7 @@ TOGGLE_DEACTIVATE_COMMAND = 'deactivate'
 HELP_COMMAND = 'commands'
 STATS_COMMAND = 'stats'
 TELEPORT_COMMAND = 'teleport'
+CYBER_COMMAND = 'what do cybermen do better than you'
 
 # Teleport Command Videos
 TELEPORT_VIDEOS = [
