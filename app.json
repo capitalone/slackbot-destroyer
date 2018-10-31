@@ -21,6 +21,10 @@
       "SLACK_USER_TOKEN": {
         "description": "The token for the user authorizing the bot.",
         "value": "replace_me"
+      },
+      "AWS_BUCKET_NAME": {
+        "description": "The name of an optional s3 bucket for storing configs.",
+        "value": "slackbot-destroy-configs"
       }
     }
   }

@@ -3,11 +3,15 @@
 import time
 import requests
 import random
+import boto3
+import json
+import io
 from slackclient import SlackClient
 from constants import *
-from util import *
 
 slack_client = SlackClient(SLACK_BOT_TOKEN)
+s3 = boto3.resource('s3')
+global_store = None
 
 def handle_command(command, channel):
     """
@@ -74,6 +78,19 @@ def handle_command(command, channel):
     if command.startswith(STATS_COMMAND):
         return send_basic_message('`I  H A V E  D E S T R O Y E D  %s  M E S S A G E  F R O M  S L A C K B O T` :robot_face:' % global_store['deletions'], channel)
 
+    if command.startswith(S3_COMMAND):
+        return handle_s3()
+
+
+def handle_s3():
+    bucket = s3.Bucket(AWS_BUCKET_NAME)
+    print(bucket.name)
+    for key in bucket.objects.all():
+        print(key.key)
+    print(AWS_BUCKET_NAME)
+    print(CONFIG_FILE)
+    to_put = s3.Object(AWS_BUCKET_NAME, CONFIG_FILE)
+    to_put.put(Body=json.dumps(global_store))
 
 def send_basic_message(message, channel):
     """ Sends a basic message with the Slack API """
@@ -205,9 +222,27 @@ def parse_slack_output(slack_rtm_output):
     return None, None
 
 
+def load_config():
+    global global_store
+    if len(AWS_ACCESS_KEY_ID) > 0 and len(AWS_SECRET_ACCESS_KEY) > 0:
+        bucket = s3.Bucket(AWS_BUCKET_NAME)
+        for obj in bucket.objects.all():
+            if obj.key == CONFIG_FILE:
+                config_bytes = io.BytesIO()
+                bucket.download_fileobj(CONFIG_FILE, config_bytes)
+                global_store = json.loads(config_bytes.getvalue())
+                return
+    # If it can't find config file in the bucket OR it doesn't have AWS configured
+    with open('config.json') as json_data:
+        global_store = json.load(json_data)
+
+
 if __name__ == "__main__":
     READ_WEBSOCKET_DELAY = 1
     if slack_client.rtm_connect():
+        print('Connected to RTM')
+        load_config()
+        print(global_store)
         print('Launch successful, waiting for input...')
 
         while True:
