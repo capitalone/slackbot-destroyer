@@ -45,3 +45,14 @@ The following commands are available.
 # Teleport to the future
 @slackbot-destroyer teleport
 ```
+
+## Development
+
+Want to mod a bot? You can develop SLACKBOT DESTROYER on OSX via the following steps:
+
+1. Use homebrew to install pyenv
+2. Use pyenv to install Python 3.6(.6)
+3. Configure either local or global python to be 3.6
+4. Use these [steps](https://pip.pypa.io/en/stable/installing/) to install Pip
+5. Using the pip you just installed, install pipenv
+6. Run pipenv install
