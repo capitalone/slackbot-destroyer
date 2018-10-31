@@ -16,7 +16,6 @@ TOGGLE_DEACTIVATE_COMMAND = 'deactivate'
 HELP_COMMAND = 'commands'
 STATS_COMMAND = 'stats'
 TELEPORT_COMMAND = 'teleport'
-S3_COMMAND = 'save'
 
 # Teleport Command Videos
 TELEPORT_VIDEOS = [
