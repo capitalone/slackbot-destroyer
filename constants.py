@@ -1,4 +1,5 @@
 import os
+from enum import Enum
 
 BOT_ID = os.environ.get('BOT_ID')
 SLACK_BOT_TOKEN = os.environ.get('SLACK_BOT_TOKEN')
@@ -17,6 +18,10 @@ HELP_COMMAND = 'commands'
 STATS_COMMAND = 'stats'
 TELEPORT_COMMAND = 'teleport'
 CYBER_COMMAND = 'what do cybermen do better than you'
+MODERATE_COMMAND = 'moderate'
+SHOW_STATE = 'wassup'
+SHOW_RESPONSES = 'track'
+CONFIGURE_RESPONSE = 'hunt'
 
 # Teleport Command Videos
 TELEPORT_VIDEOS = [
@@ -24,3 +29,5 @@ TELEPORT_VIDEOS = [
   'https://www.youtube.com/watch?v=MEb2CecR11I',
   'https://www.youtube.com/watch?v=68ugkg9RePc'
 ]
+
+State = Enum('State', 'DESTROYING MODERATING DEACTIVATED')

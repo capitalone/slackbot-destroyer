@@ -17,7 +17,7 @@ def handle_command(command, channel):
 
     if channel not in config.destroy.keys():
         # If the bot is being used in a new channel we store a new dictionary entry for it.
-        config.destroy[channel] = False
+        config.update_channel(channel, State.DEACTIVATED)
 
     if command.startswith(HELP_COMMAND):
         # Displays a list of available commands.
@@ -53,23 +53,43 @@ def handle_command(command, channel):
                     "title": "`teleport`",
                     "value": "`Teleport to the future.`",
                     "short": True
+                },
+                {
+                    "title": "`moderate`",
+                    "value": "`Moderate slackbot responses in this channel.`",
+                    "short": True
+                },
+                {
+                    "title": "`wassup`",
+                    "value": "`Show state of bot in this channel.`",
+                    "short": True
+                },
+                {
+                    "title": "`track`",
+                    "value": "`Show chance of being seen for each response the bot has seen.`",
+                    "short": True
+                },
+                {
+                    "title": "`hunt index chance`",
+                    "value": "`Change the chance of being seen for response at the given index (lower = less frequent).`",
+                    "short": True
                 }
             ],
         }
         , channel)
 
     if command.startswith(TOGGLE_DESTROY_COMMAND):
-        if config.active_in_channel(channel):
+        if config.state_in_channel(channel) == State.DESTROYING:
             return send_basic_message('`A L R E A D Y  D E S T R O Y I N G` :robot_face:', channel)
 
-        config.update_channel(channel, True)
+        config.update_channel(channel, State.DESTROYING)
         return send_basic_message('`D E S T R O Y` :robot_face:', channel)
 
     if command.startswith(TOGGLE_DEACTIVATE_COMMAND):
-        if not config.active_in_channel(channel):
+        if not config.state_in_channel(channel) == State.DEACTIVATED:
             return send_basic_message('`S T A N D I N G  B Y` :robot_face:', channel)
 
-        config.update_channel(channel, False)
+        config.update_channel(channel, State.DEACTIVATED)
         return send_basic_message('`D E A C T I V A T E` :robot_face:', channel)
 
     if command.startswith(TELEPORT_COMMAND):
@@ -78,6 +98,28 @@ def handle_command(command, channel):
 
     if command.startswith(STATS_COMMAND):
         return send_basic_message('`I  H A V E  D E S T R O Y E D  %s  M E S S A G E  F R O M  S L A C K B O T` :robot_face:' % config.deletions, channel)
+    
+    if command.startswith(MODERATE_COMMAND):
+        if config.state_in_channel(channel) == State.MODERATING:
+            return send_basic_message('`A L R E A D Y  M O D E R A T I N G` :robot_face:', channel)
+        
+        config.update_channel(channel, State.MODERATING)
+        return send_basic_message('`M O D E R A T E` :robot_face:', channel)
+    
+    if command.startswith(SHOW_STATE):
+        return send_basic_message('`C U R R E N T  S T A T U S: %r` :robot_face:' % config.state_in_channel(channel).name, channel)
+    
+    if command.startswith(SHOW_RESPONSES):
+        return send_basic_message('L O C A T E D:\n{}'.format(config.format_responses()), channel)
+
+    if command.startswith(CONFIGURE_RESPONSE):
+        options = command.split(' ')
+        if len(options) != 3 or float(options[2]) > 1:
+            return send_basic_message('I N V A L I D  C O M M A N D', channel)
+        index = int(options[1])
+        new_chance = round(float(options[2]), 1)
+        config.set_response_chance(index, new_chance)
+        return send_basic_message('A D J U S T E D  R E S P O N S E  F R E Q U E N C Y', channel)
 
     if command.startswith(CYBER_COMMAND):
         return send_basic_message('`T H E Y  D I E  B E T T E R` :robot_face:', channel)
@@ -144,6 +186,14 @@ def delete_message(timestamp, channel):
     config.increment()
 
 
+def moderate_message(timestamp, channel, text):
+    """ Delete a message if random chance doesn't work out for it """
+    chance = config.get_response_chance(text)
+    dice_roll = random.random()
+    if dice_roll > chance:
+        delete_message(timestamp, channel)
+
+
 def get_channel_list():
     """ Gets a list of channels using the Slack Web API """
 
@@ -202,9 +252,14 @@ def parse_slack_output(slack_rtm_output):
 
             # Handles message types
             if 'type' in output.keys() and output['type'] == 'message':
-                if 'channel' in output.keys() and config.active_in_channel(output['channel']):
-                    if 'subtype' in output.keys() and output['subtype'] == 'slackbot_response':
-                        delete_message(output['ts'], output['channel'])
+                if 'subtype' in output.keys() and output['subtype'] == 'slackbot_response':
+                    if 'channel' in output.keys() and 'ts' in output.keys():
+                        if config.state_in_channel(output['channel']) == State.DESTROYING:
+                            delete_message(output['ts'], output['channel'])
+                        elif config.state_in_channel(output['channel']) == State.MODERATING:
+                            moderate_message(output['ts'], output['channel'], output.get('text', ''))
+                    if 'text' in output.keys():
+                        config.add_response(output['text'])
 
                 if output and 'text' in output and AT_BOT in output['text']:
                     # Return text after the @ mention, whitespace removed
