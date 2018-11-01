@@ -15,26 +15,26 @@ Note that in order to delete Slackbot's messages, this bot must be installed by 
 4. Configure your bot with the name you want to see in Slack and a username (we'll use this later!). Save these settings and go back to the Basic Information page.\
   <img alt="Two text fields for name and username"
        src="assets/bot-user.png"
-       width=300px />
+       width=500px />
 5. You need to add Permission Scopes for the bot. For full functionality, you need to add the following:\
   <img alt="Scopes enabled: channels:read, channels:write, chat:write:bot, chat:write:user"
        src="assets/permissions-scopes.png"
-       width=300px />
+       width=400px />\
   Note that 'Add a bot user' in the Interactivity section will be automatically enabled by the previous step in the instructions.
 6. Back on the Basic Information page, the Features and Functionality section should look like this now:\
   <img alt="Bots and Permissions should have green checkmarks"
        src="assets/features-functionality.png"
-       width=300px />
+       width=400px />
 7. You can now install the app in your Slack workspace!
 8. Later, you'll need the `BOT_ID`. You can obtain this by running:
   ```bash
   export BOT_NAME=$bot_username_from_bot_user_step
   pipenv run python id.py
   ```
-9. When configuring on Heroku, you'll need the two tokens from the OAuth & Permissions page for the app. The relevant section looks like this:
+9. When configuring on Heroku, you'll need the two tokens from the OAuth & Permissions page for the app. The relevant section looks like this:\
   <img alt="Shows OAuth Access Token and Bot User OAuth Access Token fields"
        src="assets/tokens.png"
-       width=300px />
+       width=400px />
 10. Now, we need to set up the bot on Heroku (this is free). Click the button below to get started!
 
 [![Deploy](assets/heroku_button.png)](https://heroku.com/deploy?template=https://github.com/UnitedIncome/slackbot-destroyer/master)
