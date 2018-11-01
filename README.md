@@ -9,16 +9,22 @@ Note that in order to delete Slackbot's messages, this bot must be installed by 
 1. Go to your [organization's Slack integration page](https://api.slack.com/apps) and create a **new application**. An organization admin will need to do this as this bot requires permissions to delete messages using the credentials of an admin user.
 2. Create a name for the bot and pick a workspace.\
   <img alt="Text field for bot name and dropdown for workspace"
-       src="./docs/new-app.png"
+       src="assets/new-app.png"
        width=300px />
 3. On the next page, you'll need to add features and functionality to enable a bot user and set permissions. Click on 'Bots'
-4. Configure your bot with the name you want to see in Slack and a username (we'll use this later!). Save these settings and go back to the Basic Information page.
-  ![Two text fields for name and username](./docs/bot-user.png)
-5. You need to add Permission Scopes for the bot. For full functionality, you need to add the following:
-  ![Scopes enabled: channels:read, channels:write, chat:write:bot, chat:write:user](./docs/permissions-scopes.png)
+4. Configure your bot with the name you want to see in Slack and a username (we'll use this later!). Save these settings and go back to the Basic Information page.\
+  <img alt="Two text fields for name and username"
+       src="assets/bot-user.png"
+       width=300px />
+5. You need to add Permission Scopes for the bot. For full functionality, you need to add the following:\
+  <img alt="Scopes enabled: channels:read, channels:write, chat:write:bot, chat:write:user"
+       src="assets/permissions-scopes.png"
+       width=300px />
   Note that 'Add a bot user' in the Interactivity section will be automatically enabled by the previous step in the instructions.
-6. Back on the Basic Information page, the Features and Functionality section should look like this now:
-  ![Bots and Permissions should have green checkmarks](./docs/features-functionality.png)
+6. Back on the Basic Information page, the Features and Functionality section should look like this now:\
+  <img alt="Bots and Permissions should have green checkmarks"
+       src="assets/features-functionality.png"
+       width=300px />
 7. You can now install the app in your Slack workspace!
 8. Later, you'll need the `BOT_ID`. You can obtain this by running:
   ```bash
@@ -26,7 +32,9 @@ Note that in order to delete Slackbot's messages, this bot must be installed by 
   pipenv run python id.py
   ```
 9. When configuring on Heroku, you'll need the two tokens from the OAuth & Permissions page for the app. The relevant section looks like this:
-  ![Shows OAuth Access Token and Bot User OAuth Access Token fields](./docs/tokens.png)
+  <img alt="Shows OAuth Access Token and Bot User OAuth Access Token fields"
+       src="assets/tokens.png"
+       width=300px />
 10. Now, we need to set up the bot on Heroku (this is free). Click the button below to get started!
 
 [![Deploy](assets/heroku_button.png)](https://heroku.com/deploy?template=https://github.com/UnitedIncome/slackbot-destroyer/master)
