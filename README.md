@@ -45,6 +45,51 @@ The installation button will require you to enter a number of API keys. Below yo
 | `AWS_BUCKET_NAME` | The name of your S3 bucket on AWS, only required if you'd like to persist the bot settings.  | **No**  |
 | `CHANNEL_WHITELIST`  | A comma seperated list of channels you'd like the bot to operate in, if this is left blank the bot will be allowed to join any channel. Requires `channels:write` and `channels:read` permissions. For example `general, random`.  | **No** |
 
+### Configuring Persistent Storage on AWS
+
+Heroku has no ability to do persistent storage, and will periodically reboot your dynos, causing your bot to lose its state. We have a simple data persistence option using an S3 bucket on AWS. Here are steps on AWS to configure persistent storage.
+
+1. Log on to the AWS Console and navigate to the [S3 service](https://s3.console.aws.amazon.com/s3/home?region=us-east-1#).
+2. Click on 'Create bucket', and choose a name for your bucket. This value will go in the `AWS_BUCKET_NAME` environment variable in your Heroku settings.
+3. You don't need to change any other settings, so just keep clicking next to the 'Review' section, then click 'Create bucket'.
+4. You will need to create an IAM user and role for Slackbot Destroyer on the [IAM page](https://console.aws.amazon.com/iam/home?region=us-east-1#).
+5. First, click on 'Policies' in the sidebar, then 'Create policy'. We're going to create a policy that will give the user read and write access to ONLY the S3 bucket we just created.
+6. Click on the JSON tab in the policy editor and paste in the following:
+  ```javascript
+  {
+      "Version": "2012-10-17",
+      "Statement": [
+          {
+              "Effect": "Allow",
+              "Action": [
+                  "s3:ListBucket"
+              ],
+              "Resource": [
+                  "arn:aws:s3:::{bucket-name-on-s3}"
+              ]
+          },
+          {
+              "Effect": "Allow",
+              "Action": [
+                  "s3:PutObject",
+                  "s3:GetObject"
+              ],
+              "Resource": [
+                  "arn:aws:s3:::{bucket-name-on-s3}/*"
+              ]
+          }
+      ]
+  }
+  ```
+7. Click on 'Review policy', and give it a name and a description on the next page, then click 'Create policy'.
+8. Now navigate to 'Users' in the sidebar and click 'Add user'. Give the user a name and enable only 'Programmatic access', then click 'Next: Permissions'.
+9. On the 'Permissions' page, click on 'Attach existing policies directly', and find the policy we just created. Select it, then hit 'Next: Review'.
+10. Click on the 'Create user' button. **THIS IS YOUR ONLY CHANCE TO GET THE SECRET ACCESS KEY**. If you don't grab it now, you'll have to regenerate credentials for the user.
+11. Copy the 'Access key ID' and 'Secret access key' to the `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` environment variables in Heroku. Click 'Close' when you're finished.
+12. It may take a little time for permissions to percolate through the system. Go get a coffee! :coffee:
+13. In Heroku, under 'Resources', restart the worker. Use `heroku logs` on the command line to check that everything is initialized correctly.
+14. Enjoy a persistent bot!
+
 ## Commands
 
 The following commands are available.
