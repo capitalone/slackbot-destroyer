@@ -7,10 +7,10 @@ Note that in order to delete Slackbot's messages, this bot must be installed by 
 ## Installation
 
 1. Go to your [organization's Slack integration page](https://api.slack.com/apps) and create a **new application**. An organization admin will need to do this as this bot requires permissions to delete messages using the credentials of an admin user.
-2. Create a name for the bot and pick a workspace.
+2. Create a name for the bot and pick a workspace.\
   <img alt="Text field for bot name and dropdown for workspace"
        src="./docs/new-app.png"
-       width=200px />
+       width=300px />
 3. On the next page, you'll need to add features and functionality to enable a bot user and set permissions. Click on 'Bots'
 4. Configure your bot with the name you want to see in Slack and a username (we'll use this later!). Save these settings and go back to the Basic Information page.
   ![Two text fields for name and username](./docs/bot-user.png)
