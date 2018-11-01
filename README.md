@@ -8,7 +8,7 @@ Note that in order to delete Slackbot's messages, this bot must be installed by 
 
 1. Go to your [organization's Slack integration page](https://api.slack.com/apps) and create a **new application**. An organization admin will need to do this as this bot requires permissions to delete messages using the credentials of an admin user.
 2. Create a name for the bot and pick a workspace.
-  ![Text field for bot name and dropdown for workspace](./docs/new-app.png)
+  ![Text field for bot name and dropdown for workspace](./docs/new-app.png | width=200)
 3. On the next page, you'll need to add features and functionality to enable a bot user and set permissions. Click on 'Bots'
 4. Configure your bot with the name you want to see in Slack and a username (we'll use this later!). Save these settings and go back to the Basic Information page.
   ![Two text fields for name and username](./docs/bot-user.png)
@@ -52,7 +52,7 @@ Heroku has no ability to do persistent storage, and will periodically reboot you
 1. Log on to the AWS Console and navigate to the [S3 service](https://s3.console.aws.amazon.com/s3/home?region=us-east-1#).
 2. Click on 'Create bucket', and choose a name for your bucket. This value will go in the `AWS_BUCKET_NAME` environment variable in your Heroku settings.
 3. You don't need to change any other settings, so just keep clicking next to the 'Review' section, then click 'Create bucket'.
-4. You will need to create an IAM user and role for Slackbot Destroyer on the [IAM page](https://console.aws.amazon.com/iam/home?region=us-east-1#).
+4. You will need to create an IAM user and policy for Slackbot Destroyer on the [IAM page](https://console.aws.amazon.com/iam/home?region=us-east-1#).
 5. First, click on 'Policies' in the sidebar, then 'Create policy'. We're going to create a policy that will give the user read and write access to ONLY the S3 bucket we just created.
 6. Click on the JSON tab in the policy editor and paste in the following:
   ```javascript
