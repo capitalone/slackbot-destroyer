@@ -2,27 +2,47 @@
 
 This bot deletes auto responses from Slack's very own Slackbot. If you'd like to be rid of the responses in certain channels in your organization, you can employ the `Slackbot Destroyer` to fight on your behalf.
 
+Note that in order to delete Slackbot's messages, this bot must be installed by a user who has permission to delete Slackbot messages in Slack. Slackbot's messages will be deleted using the permissions of the user that installs Slackbot Destroyer.
+
 ## Installation
 
 1. Go to your [organization's Slack integration page](https://api.slack.com/apps) and create a **new application**. An organization admin will need to do this as this bot requires permissions to delete messages using the credentials of an admin user.
-2. Add a [Bot user](https://api.slack.com/bot-users) to the app you created and give it a name. 
-3. Click the button below and enter the required settings.
+2. Create a name for the bot and pick a workspace.
+  ![Text field for bot name and dropdown for workspace](./docs/new-app.png)
+3. On the next page, you'll need to add features and functionality to enable a bot user and set permissions. Click on 'Bots'
+4. Configure your bot with the name you want to see in Slack and a username (we'll use this later!). Save these settings and go back to the Basic Information page.
+  ![Two text fields for name and username](./docs/bot-user.png)
+5. You need to add Permission Scopes for the bot. For full functionality, you need to add the following:
+  ![Scopes enabled: channels:read, channels:write, chat:write:bot, chat:write:user](./docs/permissions-scopes.png)
+  Note that 'Add a bot user' in the Interactivity section will be automatically enabled by the previous step in the instructions.
+6. Back on the Basic Information page, the Features and Functionality section should look like this now:
+  ![Bots and Permissions should have green checkmarks](./docs/features-functionality.png)
+7. You can now install the app in your Slack workspace!
+8. Later, you'll need the `BOT_ID`. You can obtain this by running:
+  ```bash
+  export BOT_NAME=$bot_username_from_bot_user_step
+  pipenv run python id.py
+  ```
+9. When configuring on Heroku, you'll need the two tokens from the OAuth & Permissions page for the app. The relevant section looks like this:
+  ![Shows OAuth Access Token and Bot User OAuth Access Token fields](./docs/tokens.png)
+10. Now, we need to set up the bot on Heroku (this is free). Click the button below to get started!
 
 [![Deploy](assets/heroku_button.png)](https://heroku.com/deploy?template=https://github.com/UnitedIncome/slackbot-destroyer/master)
 
 If you'd like to run the application manually you can add the required secrets within [constants.py](constants.py) as environment variables and then run `$ python app.py`.
 
-### Configuration
+### Configuration on Heroku
 
 The installation button will require you to enter a number of API keys. Below you'll find an explanation 
 
 | Key  | Value Information | Required |
 | ------------- | ------------- | ------------- |
-| `BOT_ID`  | The ID of your Slack bot user, this is required so the bot knows when a command is directed at it. If you're unsure what your bot ID is you can run `id.py` which will print the ID, you'll need to make sure that the `BOT_NAME` environment variable corresponds with the one you setup in the Slack interface.  | **Yes** |
+| `BOT_ID`  | The ID of your Slack bot user, this is required so the bot knows when a command is directed at it. You can obtain this ID through the steps described in the Installation process.  | **Yes** |
 | `SLACK_BOT_TOKEN`  | The bot token found within the [Slack API settings](https://api.slack.com/bot-users).  | **Yes** |
 | `SLACK_USER_TOKEN`  | The user token found within the [Slack API settings](https://api.slack.com/bot-users). This must be the user token of an admin.  | **Yes** |
 | `AWS_ACCESS_KEY_ID`  | Your AWS access key id, only required if you'd like to persist the bot settings.  | **No** |
 | `AWS_SECRET_ACCESS_KEY`  | Your AWS access key id, only required if you'd like to persist the bot settings.  | **No** |
+| `AWS_BUCKET_NAME` | The name of your S3 bucket on AWS, only required if you'd like to persist the bot settings.  | **No**  |
 | `CHANNEL_WHITELIST`  | A comma seperated list of channels you'd like the bot to operate in, if this is left blank the bot will be allowed to join any channel. Requires `channels:write` and `channels:read` permissions. For example `general, random`.  | **No** |
 
 ## Commands
@@ -44,6 +64,18 @@ The following commands are available.
 
 # Teleport to the future
 @slackbot-destroyer teleport
+
+# Make Slackbot Destroyer moderate the frequency of Slackbot responses.
+@slackbot-destroyer moderate
+
+# Ask Slackbot Destroyer what it is doing in the current channel.
+@slackbot-destroyer wassup
+
+# Ask Slackbot Destroyer what Slackbot responses it has seen so far.
+@slackbot-destroyer track
+
+# Change the frequency of a Slackbot response (1 will always show the response and 0.1 will show it 10% of the time).
+@slackbot-destroyer hunt [index from track command] [new frequency]
 ```
 
 ## Development
