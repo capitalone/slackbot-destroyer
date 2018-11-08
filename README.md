@@ -1,8 +1,12 @@
-# Slackbot Destroyer :mega: :x: 
+# <img alt="Avatar for Slackbot Destroyer" src="assets/slackbot-destroyer-avatar.png" width=50px/>&nbsp;&nbsp;Slackbot Destroyer :mega: :x: 
 
 This bot deletes auto responses from Slack's very own Slackbot. If you'd like to be rid of the responses in certain channels in your organization, you can employ the `Slackbot Destroyer` to fight on your behalf.
 
 Note that in order to delete Slackbot's messages, this bot must be installed by a user who has permission to delete Slackbot messages in Slack. Slackbot's messages will be deleted using the permissions of the user that installs Slackbot Destroyer.
+
+<img alt="Example of Slackbot Destroyer in Action"
+       src="assets/slackbot-destroyer-example.gif"
+       width=800px />
 
 ## Installation
 
