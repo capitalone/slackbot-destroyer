@@ -1,10 +1,16 @@
-# Slackbot Destroyer :mega: :x: 
+# United Income at Capital One created this project with the intention of it helping us with some internal Slackbot annoyances. This project has not gained wide adoption. As such, we have stopped providing updates to this project and archived it as of October 28th, 2021.
+
+# <img alt="Avatar for Slackbot Destroyer" src="assets/slackbot-destroyer-avatar.png" width=50px/>&nbsp;&nbsp;Slackbot Destroyer :mega: :x: 
 
 This bot deletes auto responses from Slack's very own Slackbot. If you'd like to be rid of the responses in certain channels in your organization, you can employ the `Slackbot Destroyer` to fight on your behalf.
 
 Note that in order to delete Slackbot's messages, this bot must be installed by a user who has permission to delete Slackbot messages in Slack. Slackbot's messages will be deleted using the permissions of the user that installs Slackbot Destroyer.
 
-## Installation
+<img alt="Example of Slackbot Destroyer in Action"
+       src="assets/slackbot-destroyer-example.gif"
+       width=800px />
+
+## Installation Steps 💽
 
 1. Go to your [organization's Slack integration page](https://api.slack.com/apps) and create a **new application**. An organization admin will need to do this as this bot requires permissions to delete messages using the credentials of an admin user.
 2. Create a name for the bot and pick a workspace.\
@@ -41,6 +47,8 @@ Note that in order to delete Slackbot's messages, this bot must be installed by 
 
 If you'd like to run the application manually you can add the required secrets within [constants.py](constants.py) as environment variables and then run `$ python app.py`.
 
+---
+
 ### Configuration on Heroku
 
 The installation button will require you to enter a number of API keys. Below you'll find an explanation 
@@ -54,6 +62,8 @@ The installation button will require you to enter a number of API keys. Below yo
 | `AWS_SECRET_ACCESS_KEY`  | Your AWS access key id, only required if you'd like to persist the bot settings.  | **No** |
 | `AWS_BUCKET_NAME` | The name of your S3 bucket on AWS, only required if you'd like to persist the bot settings.  | **No**  |
 | `CHANNEL_WHITELIST`  | A comma seperated list of channels you'd like the bot to operate in, if this is left blank the bot will be allowed to join any channel. Requires `channels:write` and `channels:read` permissions. For example `general, random`.  | **No** |
+
+---
 
 ### Configuring Persistent Storage on AWS
 
@@ -100,7 +110,7 @@ Heroku has no ability to do persistent storage, and will periodically reboot you
 13. In Heroku, under 'Resources', restart the worker. Use `heroku logs` on the command line to check that everything is initialized correctly.
 14. Enjoy a persistent bot!
 
-## Commands
+## Commands 💻
 
 The following commands are available.
 
@@ -133,9 +143,9 @@ The following commands are available.
 @slackbot-destroyer hunt [index from track command] [new frequency]
 ```
 
-## Development
+## Development 🔧
 
-Want to mod a bot? You can develop SLACKBOT DESTROYER on OSX via the following steps:
+Want to mod a bot? You can develop **SLACKBOT DESTROYER** on OSX via the following steps:
 
 1. Use homebrew to install pyenv
 2. Use pyenv to install Python 3.6(.6)
