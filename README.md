@@ -1,3 +1,5 @@
+# United Income at Capital One created this project with the intention of it helping us with some internal Slackbot annoyances. This project has not gained wide adoption. As such, we have stopped providing updates to this project and archived it as of October 28th, 2021.
+
 # <img alt="Avatar for Slackbot Destroyer" src="assets/slackbot-destroyer-avatar.png" width=50px/>&nbsp;&nbsp;Slackbot Destroyer :mega: :x: 
 
 This bot deletes auto responses from Slack's very own Slackbot. If you'd like to be rid of the responses in certain channels in your organization, you can employ the `Slackbot Destroyer` to fight on your behalf.
